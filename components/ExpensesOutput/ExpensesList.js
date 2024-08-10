@@ -8,6 +8,7 @@ function renderExpenseItems(itemData) {
       amount={itemData.item.amount}
       description={itemData.item.description}
       date={itemData.item.date}
+      expenseId={itemData.item.id}
     />
   );
 }
@@ -18,6 +19,8 @@ function ExpensesList({ expenses }) {
       data={expenses}
       renderItem={renderExpenseItems}
       keyExtractor={(item) => item.id}
+      showsVerticalScrollIndicator={false}
+      // showsHorizontalScrollIndicator={false}
     />
   );
 }

@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import ExpensesSummary from "./ExpensesSummary";
 import ExpensesList from "./ExpensesList";
 import { GlobalStyles } from "../../Constants/style";
@@ -29,49 +29,49 @@ const DUMMY = [
     date: new Date("2024-08-06"),
   },
   {
-    id: "e1",
+    id: "e5",
     description: "A pair of shoe",
     amount: 300.0,
     date: new Date("2024-08-08"),
   },
   {
-    id: "e2",
+    id: "e6",
     description: "Mobile Phone",
     amount: 23000.0,
     date: new Date("2024-08-03"),
   },
   {
-    id: "e3",
+    id: "e7",
     description: "Credit Card Bill",
     amount: 30000.0,
     date: new Date("2024-08-05"),
   },
   {
-    id: "e4",
+    id: "e8",
     description: "Grocessary",
     amount: 500.0,
     date: new Date("2024-08-06"),
   },
   {
-    id: "e1",
+    id: "e9",
     description: "A pair of shoe",
     amount: 300.0,
     date: new Date("2024-08-08"),
   },
   {
-    id: "e2",
+    id: "e10",
     description: "Mobile Phone",
     amount: 23000.0,
     date: new Date("2024-08-03"),
   },
   {
-    id: "e3",
+    id: "e11",
     description: "Credit Card Bill",
     amount: 30000.0,
     date: new Date("2024-08-15"),
   },
   {
-    id: "e4",
+    id: "e12",
     description: "Grocessary",
     amount: 500.0,
     date: new Date("2024-08-06"),
@@ -79,10 +79,14 @@ const DUMMY = [
 ];
 
 function ExpensesOutput({ expenses, durationLabel }) {
+  let content = <Text style={styles.fallBackText}>No Expenses!</Text>;
+  if (expenses.length > 0) {
+    content = <ExpensesList expenses={expenses} />;
+  }
   return (
     <View style={styles.container}>
-      <ExpensesSummary expenses={DUMMY} durationLabel={durationLabel} />
-      <ExpensesList expenses={DUMMY} />
+      <ExpensesSummary expenses={expenses} durationLabel={durationLabel} />
+      {content}
     </View>
   );
 }
@@ -96,5 +100,11 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     backgroundColor: GlobalStyles.colors.gray700,
     flex: 1,
+  },
+  fallBackText: {
+    color: "white",
+    fontSize: 16,
+    textAlign: "center",
+    marginTop: 32,
   },
 });
