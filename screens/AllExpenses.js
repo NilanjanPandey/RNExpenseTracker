@@ -5,6 +5,7 @@ import { useContext } from "react";
 
 function AllExpenses() {
   const expContext = useContext(ExpensesContext);
+  // console.log(expContext.expenses)
   return (
     <ExpensesOutput expenses={expContext.expenses} durationLabel="Total" />
   );
