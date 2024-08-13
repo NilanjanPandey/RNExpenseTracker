@@ -22,9 +22,9 @@ export default Button;
 
 const styles = StyleSheet.create({
   button: {
-    borederRadius: 4,
+    borderRadius: 8,
     padding: 8,
-    // backgroundColor: GlobalStyles.colors.primary500,
+    backgroundColor: GlobalStyles.colors.primary200,
   },
   flat: {
     backgroundColor: "transparent",
