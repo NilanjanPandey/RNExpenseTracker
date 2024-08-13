@@ -2,7 +2,7 @@ import { TextInput, View, StyleSheet, Text } from "react-native";
 import { GlobalStyles } from "../../Constants/style";
 
 function Input({ label, textInputConfig,isValid }) {
-    console.log(isValid)
+    // console.log(isValid)
   const inputStyles = [styles.input];
   if (textInputConfig && textInputConfig.multiline) {
     inputStyles.push(styles.inputMultiLine);

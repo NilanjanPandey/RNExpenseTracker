@@ -1,15 +1,18 @@
 import { View, StyleSheet } from "react-native";
-import { useContext, useLayoutEffect } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import IconButton from "../components/UI/IconButton";
 import { GlobalStyles } from "../Constants/style";
 import Button from "../components/UI/Button";
 import { ExpensesContext } from "../Store/expenses-context";
 
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
-import { storeExpense } from "../utils/http";
-
+import { deleteExpense, storeExpense, updateExpense } from "../utils/http";
+import SpinnerOverlay from "../components/UI/SpinnerOverlay";
+import ErrorOverlay from "../components/UI/ErrorOverlay";
 
 function ManageExpense({ navigation, route }) {
+  const [isLoading, setLoading] = useState(false);
+  const [error, setError] = useState();
   const expContext = useContext(ExpensesContext);
   const expenseId = route.params?.expenseId;
 
@@ -27,24 +30,51 @@ function ManageExpense({ navigation, route }) {
     });
   }, [navigation, isEditing]);
 
-  function deleteExpenseHandler() {
+  async function deleteExpenseHandler() {
+    setLoading(true);
+    try {
+      await deleteExpense(expenseId);
+      expContext._deleteExpense(expenseId);
+      navigation.goBack();
+    } catch (error) {
+      setError("Could not delete, please try agian!");
+      setLoading(false);
+    }
+    setLoading(false);
     // console.log("expenseID-MangeExpense: ", expenseId);
-    expContext._deleteExpense(expenseId);
-    navigation.goBack();
   }
 
   function cancelHandler() {
     navigation.goBack();
   }
-  function confirmHandler(expenseData) {
-    // const generatedID =generateUniqueId();
-    if (isEditing) {
-      expContext._updateExpense(expenseId, expenseData);
-    } else {
-      expContext._addExpense(expenseData);
-      storeExpense(expenseData)
+  async function confirmHandler(expenseData) {
+    setLoading(true);
+    try {
+      if (isEditing) {
+        updateExpense(expenseId, expenseData);
+        expContext._updateExpense(expenseId, expenseData);
+        
+      } else {
+        const id = await storeExpense(expenseData);
+        expContext._addExpense({ ...expenseData, id: id });
+      }
+      navigation.goBack();
+      setLoading(false);
+    } catch (error) {
+      setError("There is some error at our end, please try again later!");
+      setLoading(false);
     }
-    navigation.goBack();
+
+    // const generatedID =generateUniqueId();
+  }
+  function modalCloseHandler() {
+    setError(null);
+  }
+  if (isLoading) {
+    return <SpinnerOverlay />;
+  }
+  if (error && !isLoading) {
+    return <ErrorOverlay message={error} onConfirm={modalCloseHandler} />;
   }
   return (
     <View style={styles.rootContainer}>
